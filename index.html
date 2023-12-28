@@ -1,34 +1,81 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Keyboard Language Converter</title>
+  <title>Keyboard Layout Converter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    #info {
+      margin-bottom: 20px;
+      padding: 10px;
+      background-color: #f0f0f0;
+      border-radius: 5px;
+    }
+
+    #editor {
+      width: 98%;
+      min-height: 200px;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      outline: none;
+      font-size: 16px;
+      line-height: 1.5;
+      overflow: auto;
+    }
+  </style>
 </head>
 <body>
-  <textarea id="textInput" placeholder="Type here..."></textarea>
+  <div id="info">
+    <h1>Keyboard Layout Converter (Armenian Phonetic)</h1>
+    <p>As you type, the entered characters will be automatically converted to their equivalents based on the predefined mapping. In this example, typing 'a' will display 'ա', 'A' will show 'Ա', '8' will present 'ր', and so forth.</p>
+  </div>
+
+  <div id="editor" contenteditable="true" placeholder="Type here..."></div>
+
   <script>
-    const keyboardMapping = {
-      // Define your keyboard mapping here
-      'a': 'ա',
-      'A': 'Ա',
-      '8': 'ր',
-      // Add more mappings as needed
-    };
+    // Fetch the key mapping data from keymap-data.json
+    fetch('armenian-phonetic-data.json')
+      .then(response => response.json())
+      .then(data => {
+        const keyboardMapping = data;
 
-    document.getElementById('textInput').addEventListener('input', function(event) {
-      const inputText = event.target.value;
-      const convertedText = convertToOtherLanguage(inputText);
-      event.target.value = convertedText;
-    });
+        const editor = document.getElementById('editor');
 
-    function convertToOtherLanguage(text) {
-      let convertedText = '';
-      for (let i = 0; i < text.length; i++) {
-        const char = text.charAt(i);
-        const convertedChar = keyboardMapping[char] || char;
-        convertedText += convertedChar;
-      }
-      return convertedText;
-    }
+        editor.addEventListener('input', function(event) {
+          const selection = window.getSelection();
+          const range = selection.getRangeAt(0);
+          const startOffset = range.startOffset;
+          const text = editor.textContent;
+          const convertedText = convertToOtherLanguage(text, keyboardMapping);
+          editor.innerHTML = convertedText;
+
+          if (text.length === convertedText.length) {
+            range.setStart(editor.firstChild, startOffset);
+            range.setEnd(editor.firstChild, startOffset);
+          } else {
+            range.collapse(false);
+          }
+          selection.removeAllRanges();
+          selection.addRange(range);
+        });
+
+        function convertToOtherLanguage(text, mapping) {
+          let convertedText = '';
+          for (let i = 0; i < text.length; i++) {
+            const char = text.charAt(i);
+            const convertedChar = mapping[char] || char;
+            convertedText += convertedChar;
+          }
+          return convertedText;
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching armenian-phonetic-data.json:', error);
+      });
   </script>
 </body>
 </html>
