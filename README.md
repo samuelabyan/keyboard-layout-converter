@@ -1,4 +1,4 @@
-# Keyboard Layout Converter
+# Simple Keyboard Layout Converter
 
 **Live preview**: Go to the https://samuelabyan.github.io/keyboard-layout-converter to use the converter.
 
