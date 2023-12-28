@@ -37,45 +37,49 @@
   <div id="editor" contenteditable="true" placeholder="Type here..."></div>
 
   <script>
-    // Fetch the key mapping data from keymap-data.json
-    fetch('armenian-phonetic-data.json')
-      .then(response => response.json())
-      .then(data => {
-        const keyboardMapping = data;
+    const keyboardMapping = {
+      "q": "չ",
+      "w": "գ",
+      "e": "ե",
+      "r": "ր",
+      "t": "տ",
+      "y": "ը",
+      "Y": "Ը",
+      // Add more mappings as needed
+      "Y": "Ը",
+      "U": "Վ",
+      // Upper and lowercase letters can also be defined
+    };
 
-        const editor = document.getElementById('editor');
+    const editor = document.getElementById('editor');
 
-        editor.addEventListener('input', function(event) {
-          const selection = window.getSelection();
-          const range = selection.getRangeAt(0);
-          const startOffset = range.startOffset;
-          const text = editor.textContent;
-          const convertedText = convertToOtherLanguage(text, keyboardMapping);
-          editor.innerHTML = convertedText;
+    editor.addEventListener('input', function(event) {
+      const selection = window.getSelection();
+      const range = selection.getRangeAt(0);
+      const startOffset = range.startOffset;
+      const text = editor.textContent;
+      const convertedText = convertToArmenianPhonetic(text);
+      editor.innerHTML = convertedText;
 
-          if (text.length === convertedText.length) {
-            range.setStart(editor.firstChild, startOffset);
-            range.setEnd(editor.firstChild, startOffset);
-          } else {
-            range.collapse(false);
-          }
-          selection.removeAllRanges();
-          selection.addRange(range);
-        });
+      if (text.length === convertedText.length) {
+        range.setStart(editor.firstChild, startOffset);
+        range.setEnd(editor.firstChild, startOffset);
+      } else {
+        range.collapse(false);
+      }
+      selection.removeAllRanges();
+      selection.addRange(range);
+    });
 
-        function convertToOtherLanguage(text, mapping) {
-          let convertedText = '';
-          for (let i = 0; i < text.length; i++) {
-            const char = text.charAt(i);
-            const convertedChar = mapping[char] || char;
-            convertedText += convertedChar;
-          }
-          return convertedText;
-        }
-      })
-      .catch(error => {
-        console.error('Error fetching armenian-phonetic-data.json:', error);
-      });
+    function convertToArmenianPhonetic(text) {
+      let convertedText = '';
+      for (let i = 0; i < text.length; i++) {
+        const char = text.charAt(i);
+        const convertedChar = keyboardMapping[char] || char;
+        convertedText += convertedChar;
+      }
+      return convertedText;
+    }
   </script>
 </body>
 </html>
