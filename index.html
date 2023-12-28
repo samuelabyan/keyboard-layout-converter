@@ -1,14 +1,34 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Save Text to Selected Google Doc</title>
-    <script src="https://apis.google.com/js/api.js"></script>
-    <script src="script.js"></script> <!-- Include your JavaScript file -->
+  <title>Keyboard Language Converter</title>
 </head>
 <body>
-    <div id="signinButton"></div>
-    <input type="text" id="textInput">
-    <button onclick="saveToSelectedDoc()">Save to Selected Google Doc</button>
+  <textarea id="textInput" placeholder="Type here..."></textarea>
+  <script>
+    const keyboardMapping = {
+      // Define your keyboard mapping here
+      'a': 'ա',
+      'A': 'Ա',
+      '8': 'ր',
+      // Add more mappings as needed
+    };
+
+    document.getElementById('textInput').addEventListener('input', function(event) {
+      const inputText = event.target.value;
+      const convertedText = convertToOtherLanguage(inputText);
+      event.target.value = convertedText;
+    });
+
+    function convertToOtherLanguage(text) {
+      let convertedText = '';
+      for (let i = 0; i < text.length; i++) {
+        const char = text.charAt(i);
+        const convertedChar = keyboardMapping[char] || char;
+        convertedText += convertedChar;
+      }
+      return convertedText;
+    }
+  </script>
 </body>
 </html>
