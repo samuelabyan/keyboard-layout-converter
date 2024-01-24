@@ -21,7 +21,6 @@
       padding: 10px;
       border-radius: 5px;
       border: 1px solid #ccc;
-      outline: none;
       font-size: 16px;
       line-height: 1.5;
       overflow: auto;
@@ -34,7 +33,7 @@
     <p>As you type, the entered characters will be automatically converted to their equivalents based on the predefined mapping. In the demo below, mapping is configured for Armenian phonetic layout: typing 'a' will display 'ա', 'A' > 'Ա', '8' > 'ր', and so forth.</p>
   </div>
 
-  <div id="editor" contenteditable="true" placeholder="Type here..."></div>
+  <textarea id="editor" placeholder="Type here..."></textarea>
 
   <script>
     const keyboardMapping = {
@@ -138,21 +137,13 @@
     const editor = document.getElementById('editor');
 
     editor.addEventListener('input', function(event) {
-      const selection = window.getSelection();
-      const range = selection.getRangeAt(0);
-      const startOffset = range.startOffset;
-      const text = editor.textContent;
+      const selectionStart = editor.selectionStart;
+      const selectionEnd = editor.selectionEnd;
+      const text = editor.value;
       const convertedText = convertToArmenianPhonetic(text);
-      editor.innerHTML = convertedText;
+      editor.value = convertedText;
 
-      if (text.length === convertedText.length) {
-        range.setStart(editor.firstChild, startOffset);
-        range.setEnd(editor.firstChild, startOffset);
-      } else {
-        range.collapse(false);
-      }
-      selection.removeAllRanges();
-      selection.addRange(range);
+      editor.setSelectionRange(selectionStart, selectionEnd);
     });
 
     function convertToArmenianPhonetic(text) {
