@@ -1,0 +1,30 @@
+body {
+     font-family: Arial, sans-serif;
+     margin: 20px;
+}
+ #info {
+     margin-bottom: 20px;
+     padding: 10px;
+     background-color: #f0f0f0;
+     border-radius: 5px;
+}
+ #editor {
+     width: 98%;
+     min-height: 500px;
+     padding: 10px;
+     border-radius: 5px;
+     border: 1px solid #ccc;
+     font-size: 16px;
+     line-height: 1.5;
+     overflow: auto;
+}
+ #copyNotice {
+     position: fixed;
+     bottom: 10px;
+     left: 50%;
+     transform: translateX(-50%);
+     background-color: #4CAF50;
+     color: white;
+     padding: 10px;
+     display: none;
+}
